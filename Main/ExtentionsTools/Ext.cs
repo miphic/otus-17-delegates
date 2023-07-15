@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main
+namespace Main.ExtentionsTools
 {
     static public class Ext
     {
@@ -27,7 +27,7 @@ namespace Main
                 throw new ArgumentException("список пустой!");
             T max = elems.First();
             foreach (T item in elems.Skip(1))
-                if (getParameter(item) > getParameter(max) )
+                if (getParameter(item) > getParameter(max))
                     max = item;
             return max;
         }

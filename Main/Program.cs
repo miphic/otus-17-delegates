@@ -1,14 +1,15 @@
-﻿using Main;
+﻿using Main.ExtentionsTools;
+using Main.IO;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        exercise_1();
-        
+        ThereisGetMaxSample();
+        ThereisFindFilesEventsOutput();
     }
 
-    private static void exercise_1()
+    private static void ThereisGetMaxSample()
     {
         var list1 = new List<SampleValuedClass> {
             new SampleValuedClass(1.0f),
@@ -30,12 +31,13 @@ internal class Program
             new SampleValuedClass(4.131f),
             new SampleValuedClass(1.911f),
         };
-
-
         Console.WriteLine(list1.GetMax((SampleValuedClass fff) => fff.Value));
         Console.WriteLine(list2.GetMax(SampleValuedClass.GetValueFunc));
+    }
 
-        
-        
+    private static void ThereisFindFilesEventsOutput()
+    {
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        DirectoryRunner runner = new DirectoryRunner(path); 
     }
 }
