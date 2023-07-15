@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    public class ValuedClass
+    public class SampleValuedClass
     {
-        public ValuedClass(float value)
+        public static Func<SampleValuedClass, float>  GetValueFunc = (SampleValuedClass fff) => fff.Value;
+        public SampleValuedClass(float value)
         {
             Value = value;
         }
