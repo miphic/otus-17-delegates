@@ -16,30 +16,46 @@ namespace Main.IO
             Path = path;
             //config 
             FileFound += new EventHandler<EventArgs>(OnFileFound);
-            //var cancel = new CancellationToken();
-            if (Directory.Exists(path))
-                Run();
-            else
-                throw new DirectoryNotFoundException();
+            using var CTS = new CancellationTokenSource();
+            {
+                Task t;
+                if (Directory.Exists(path))
+                    t = Run(CTS.Token);
+                else
+                    throw new DirectoryNotFoundException();
+
+                Task.Delay(40).ContinueWith(
+                    (t) =>
+                    {
+                        if (t != null && !t.IsCompleted)
+                        {
+                            Console.WriteLine("Canceled by timeout");
+                            CTS.Cancel();
+                        }
+                    }
+                 );
+            }
         }
 
         public void OnFileFound<EventArgs>(Object? obj, EventArgs e) {
-            Console.WriteLine(e.ToString());
+            Console.WriteLine(e?.ToString());
         }
 
         public string Path { get; init; }
 
-        //async private Task Run(CancellationToken cancellationToken)
-        private void Run()
+        async private Task Run(CancellationToken cancellationToken)        
         {
             //todo: пробелма в неодостижимости поочередного нахождения файлов.
-            var f = new DirectoryInfo(Path).EnumerateFiles();
-            foreach (var f2 in f)
-            {   
-                //if(!cancellationToken.IsCancellationRequested)                
-                    // может лучше использовать/ new FileArg(f2 as FileInfo?) /
-                    FileFound(this, new FileArg(f2.FullName));
-            }
+            await Task.Run(() => {
+                var f = new DirectoryInfo(Path).EnumerateFiles();
+                foreach (var f2 in f)
+                {
+                    new CancellationTokenSource();
+                    if (!cancellationToken.IsCancellationRequested)
+                        // может лучше использовать/ new FileArg(f2 as FileInfo?) /
+                        FileFound(this, new FileArg(f2.FullName));
+                }
+            });
         }
         class FileArg : EventArgs
         {

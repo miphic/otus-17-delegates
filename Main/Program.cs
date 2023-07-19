@@ -37,7 +37,8 @@ internal class Program
 
     private static void ThereisFindFilesEventsOutput()
     {
-        var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        DirectoryRunner runner = new DirectoryRunner(path); 
+        //var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+        var runner = new DirectoryRunner(path); 
     }
 }
